@@ -2,6 +2,7 @@
     package="com.example.live_weather">
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="live_weather"
         android:name="${applicationName}"

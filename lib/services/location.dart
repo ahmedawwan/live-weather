@@ -6,10 +6,12 @@ class Location {
 
   Future<void> getCurrentLocation() async {
     try {
-      if (_isLocationPermitted() == true) {
+      print('getting location');
+      if (await isLocationPermitted()) {
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.low,
         );
+        print("location gotten");
         _latitude = position.latitude;
         _longitude = position.longitude;
       } else {
@@ -20,21 +22,20 @@ class Location {
     }
   }
 
-  double getLongitude() {
-    return _longitude;
-  }
-
-  double getLatitude() {
+  getLatitude() {
     return _latitude;
   }
 
-  Future<bool> _isLocationPermitted() async {
+  getLongitude() {
+    return _longitude;
+  }
+
+  Future<bool> isLocationPermitted() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     LocationPermission permission;
 
     // If location services are not enabled request users to enable the location services.
     if (!serviceEnabled) {
-      print('Location services are disabled.');
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -42,14 +43,11 @@ class Location {
       permission = await Geolocator.requestPermission();
       // If User denies Permissions
       if (permission == LocationPermission.denied) {
-        print('Location services are disabled.');
         return false;
       }
     }
     // Permissions are denied forever
     if (permission == LocationPermission.deniedForever) {
-      print(
-          'Location permissions are permanently denied, we cannot request permissions.');
       return false;
     }
     return true;

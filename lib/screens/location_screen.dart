@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:live_weather/services/weather.dart';
 import 'package:live_weather/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
+  const LocationScreen({this.locationWeather});
+
+  final locationWeather;
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  int temperature;
+  int condition;
+  String cityName;
+
+  @override
+  void initState() {
+    super.initState();
+    updateUI(widget.locationWeather);
+  }
+
+  WeatherModel weatherModel = WeatherModel();
+
+  updateUI(dynamic weatherData) {
+    print(weatherData);
+    temperature = weatherData['main']['temp'].toInt();
+    condition = weatherData['weather'][0]['id'];
+    cityName = weatherData['name'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,22 +71,22 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
-                  children: const <Widget>[
+                  children: <Widget>[
                     Text(
-                      '32°',
+                      '$temperature°',
                       style: kTempTextStyle,
                     ),
                     Text(
-                      '☀️',
+                      '${weatherModel.getWeatherIcon(condition)}️',
                       style: kConditionTextStyle,
                     ),
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(right: 15.0),
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "It's 🍦 time in San Francisco!",
+                  "${weatherModel.getMessage(temperature)} in $cityName!",
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
