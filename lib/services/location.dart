@@ -6,12 +6,12 @@ class Location {
 
   Future<void> getCurrentLocation() async {
     try {
-      print('getting location');
+      print('get permission');
       if (await isLocationPermitted()) {
+        print('get location');
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.low,
         );
-        print("location gotten");
         _latitude = position.latitude;
         _longitude = position.longitude;
       } else {
